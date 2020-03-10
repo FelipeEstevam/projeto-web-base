@@ -15,6 +15,10 @@ import javax.ws.rs.core.Response.Status;
 import com.stefanini.model.Pessoa;
 import com.stefanini.servico.PessoaServico;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api
 @Path("pessoas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -24,17 +28,20 @@ public class TesteResource {
 	private PessoaServico pessoaServico;
 
 	@GET
+	@ApiOperation(value="obterListaPessoa")
 	public Response obterListaPessoa() {
 		return Response.ok(pessoaServico.getList().get()).build();
 	}
 
 	@POST
+	@ApiOperation(value="obterListaPessoa")
 	public Response obterListaPessoa(@Valid Pessoa pessoa) {
 		return Response.ok(pessoaServico.salvar(pessoa)).build();
 	}
 	
 
 	@GET
+	@ApiOperation(value="obterPessoaID")
 	@Path("{id}")
 	public Response obterPessoa(@PathParam("id") Long id) {
 		return Response.status(Status.INTERNAL_SERVER_ERROR).entity("deu ruim").build();

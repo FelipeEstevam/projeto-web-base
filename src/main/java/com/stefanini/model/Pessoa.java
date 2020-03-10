@@ -33,8 +33,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @NamedQueries(value = {
 		@NamedQuery(name = "Pessoa.findByNome",
 				query = "select p from Pessoa p where p.nome=:nome"),
-		@NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome",
-				query = "select  p from Pessoa p  JOIN FETCH p.perfils JOIN FETCH p.enderecos  where p.nome=:nome")
+//		@NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome",
+//				query = "select  p from Pessoa p  JOIN FETCH p.perfils JOIN FETCH p.enderecos  where p.nome=:nome")
 })
 public class Pessoa implements Serializable{
 

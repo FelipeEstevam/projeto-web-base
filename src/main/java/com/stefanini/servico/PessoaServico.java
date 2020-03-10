@@ -28,6 +28,8 @@ import java.util.Optional;
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class PessoaServico implements Serializable {
 
+	
+	
 	/**
 	 * 
 	 */

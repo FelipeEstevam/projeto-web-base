@@ -2,6 +2,7 @@ package com.stefanini.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,12 +31,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @Entity
 @Table(name = "TB_PESSOA")
-@NamedQueries(value = {
-		@NamedQuery(name = "Pessoa.findByNome",
-				query = "select p from Pessoa p where p.nome=:nome"),
-//		@NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome",
-//				query = "select  p from Pessoa p  JOIN FETCH p.perfils JOIN FETCH p.enderecos  where p.nome=:nome")
-})
 public class Pessoa implements Serializable{
 
 	
@@ -79,22 +74,21 @@ public class Pessoa implements Serializable{
 	/**
 	 * Mapeamento de Enderecos Unidirecional
 	 */
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY)
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name = "CO_SEQ_PESSOA",referencedColumnName = "CO_SEQ_PESSOA")
-	private Set<Endereco> enderecos;
+	private Set<Endereco> enderecos = new HashSet<>();
 
 	/**
 	 * Mapeamento de Perfis Unidirecional
 	 */
-	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(
 			name = "TB_PESSOA_PERFIL",
 			joinColumns = {@JoinColumn(name = "CO_SEQ_PESSOA")},
 			inverseJoinColumns = {@JoinColumn(name = "CO_SEQ_PERFIL")}
 	)
-	private Set<Perfil> perfils;
+	private Set<Perfil> perfils = new HashSet<>();
 	/**
 	 * Metodo construtor da classe
 	 */
@@ -159,7 +153,7 @@ public class Pessoa implements Serializable{
 		this.dataNascimento = dataNascimento;
 	}
 
-	
+
 
 	public String getEmail() {
 		return email;

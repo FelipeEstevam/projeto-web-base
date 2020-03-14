@@ -1,7 +1,10 @@
 package com.stefanini.servico;
 
-import com.stefanini.dao.PessoaDao;
+import com.stefanini.dao.PerfilDao;
+import com.stefanini.dao.PerfilDao;
 import com.stefanini.exception.NegocioException;
+import com.stefanini.model.Perfil;
+import com.stefanini.model.Perfil;
 import com.stefanini.model.Pessoa;
 
 import javax.ejb.*;
@@ -10,7 +13,6 @@ import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * 
@@ -22,7 +24,7 @@ import java.util.logging.Logger;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-public class PessoaServico implements Serializable {
+public class PerfilServico implements Serializable {
 
 
 	/**
@@ -31,64 +33,60 @@ public class PessoaServico implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private PessoaDao dao;
+	private PerfilDao dao;
 
 	@Inject
 	private PessoaPerfilServico pessoaPerfilServico;
 
 	/**
-	 * Salvar os dados de uma Pessoa
+	 * Salvar os dados de uma Perfil
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Pessoa salvar(@Valid Pessoa pessoa) {
-		return dao.salvar(pessoa);
+	public Perfil salvar(@Valid Perfil perfil) {
+		return dao.salvar(perfil);
 	}
+
+
 	/**
 	 * Validando se existe pessoa com email
 	 */
-	public Boolean validarPessoa(@Valid Pessoa pessoa){
-		if(pessoa.getId() != null){
-			Optional<Pessoa> encontrar = dao.encontrar(pessoa.getId());
-			if(encontrar.get().getEmail().equals(pessoa.getEmail())){
-				return Boolean.TRUE;
-			}
-		}
-		Optional<Pessoa> pessoa1 = dao.buscarPessoaPorEmail(pessoa.getEmail());
-		return pessoa1.isEmpty();
+	public Boolean validarPerfil(@Valid Perfil perfil){
+		Optional<Perfil> perfil1 = dao.buscarPessoaPorNome(perfil.getNome());
+		return perfil1.isEmpty();
 	}
 
 	/**
-	 * Atualizar o dados de uma pessoa
+	 * Atualizar o dados de uma perfil
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Pessoa atualizar(@Valid Pessoa entity) {
+	public Perfil atualizar(@Valid Perfil entity) {
 		return dao.atualizar(entity);
 	}
 
 	/**
-	 * Remover uma pessoa pelo id
+	 * Remover uma perfil pelo id
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void remover(@Valid Long id) throws NegocioException {
-		if(pessoaPerfilServico.buscarPessoaPerfil(id,null).count() == 0){
+		if(pessoaPerfilServico.buscarPessoaPerfil(null,id).count() == 0){
 			dao.remover(id);
 			return;
 		}
-		throw new NegocioException("Não foi possivel remover a pessoa");
+		throw new NegocioException("Não foi possivel remover o perfil");
 	}
 
 	/**
-	 * Buscar uma lista de Pessoa
+	 * Buscar uma lista de Perfil
 	 */
-	public Optional<List<Pessoa>> getList() {
+	public Optional<List<Perfil>> getList() {
 		return dao.getList();
 	}
 
 	/**
-	 * Buscar uma Pessoa pelo ID
+	 * Buscar uma Perfil pelo ID
 	 */
 //	@Override
-	public Optional<Pessoa> encontrar(Long id) {
+	public Optional<Perfil> encontrar(Long id) {
 		return dao.encontrar(id);
 	}
 
